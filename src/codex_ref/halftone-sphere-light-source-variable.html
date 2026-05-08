@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Halftone Sphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:        #ede9e0;
+      --ink:       #18140f;
+      --muted:     #a89e8e;
+      --rule:      #c9c0b0;
+    }
+
+    body {
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: var(--ink);
+      gap: 0;
+      overflow: hidden;
+    }
+
+    /* ── decorative rule above ─────────────────────────── */
+    .rule {
+      width: 1px;
+      height: 52px;
+      background: var(--rule);
+      margin-bottom: 28px;
+    }
+
+    /* ── canvas ────────────────────────────────────────── */
+    canvas { display: block; }
+
+    /* ── info strip below ──────────────────────────────── */
+    .strip {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .phase-label {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 300;
+      height: 14px;
+      transition: opacity 0.4s;
+    }
+
+    /* three indicator dots */
+    .indicators {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .ind {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--rule);
+      transition: background 0.5s ease, transform 0.4s ease;
+    }
+
+    .ind.on {
+      background: var(--ink);
+      transform: scale(1.6);
+    }
+
+    /* light-position diagram */
+    .compass {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      border: 0.5px solid var(--rule);
+      border-radius: 50%;
+      margin-top: 4px;
+    }
+
+    .compass-dot {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--ink);
+      transform: translate(-50%, -50%);
+      transition: top 0.9s cubic-bezier(.4,0,.2,1),
+                  left 0.9s cubic-bezier(.4,0,.2,1);
+    }
+
+    .rule-bottom {
+      width: 1px;
+      height: 52px;
+      background: var(--rule);
+      margin-top: 28px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="rule"></div>
+  <canvas id="c"></canvas>
+
+  <div class="strip">
+    <div class="phase-label" id="lbl">light · top-right</div>
+    <div class="indicators">
+      <div class="ind on" id="i0"></div>
+      <div class="ind"    id="i1"></div>
+      <div class="ind"    id="i2"></div>
+    </div>
+    <div class="compass">
+      <div class="compass-dot" id="cdot"></div>
+    </div>
+  </div>
+
+  <div class="rule-bottom"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   SETUP
+═══════════════════════════════════════════════════════════ */
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+
+const SIZE = Math.min(
+  window.innerWidth  * 0.88,
+  window.innerHeight * 0.60,
+  560
+);
+canvas.width  = SIZE;
+canvas.height = SIZE;
+
+const cx = SIZE / 2;
+const cy = SIZE / 2;
+const R  = SIZE * 0.435;
+
+/* dot grid */
+const SPACING   = SIZE / 54;
+const MAX_DOT_R = SPACING * 0.48;
+
+/* ═══════════════════════════════════════════════════════════
+   THREE LIGHT POSITIONS
+   Each defines a 3-D direction toward the light source.
+   x: right+  y: down+  z: toward viewer+
+═══════════════════════════════════════════════════════════ */
+const LIGHTS = [
+  { raw: [ 1.3, -1.0,  1.1], label: 'light · top-right' },
+  { raw: [-1.2,  0.2,  0.9], label: 'light · left'       },
+  { raw: [ 0.1,  1.3,  0.8], label: 'light · bottom'     },
+];
+
+/* normalise */
+LIGHTS.forEach(l => {
+  const [x, y, z] = l.raw;
+  const len = Math.hypot(x, y, z);
+  l.dir = [x / len, y / len, z / len];
+});
+
+/* ═══════════════════════════════════════════════════════════
+   TIMING  (all ms)
+═══════════════════════════════════════════════════════════ */
+const HOLD       = 2600;   /* dwell at each position */
+const XFADE      = 2000;   /* smooth cross-fade      */
+const PHASE_DUR  = HOLD + XFADE;
+const TOTAL_DUR  = PHASE_DUR * 3;
+
+/* ═══════════════════════════════════════════════════════════
+   EASING
+═══════════════════════════════════════════════════════════ */
+function easeInOutQuint(t) {
+  return t < 0.5
+    ? 16 * t * t * t * t * t
+    : 1 - Math.pow(-2 * t + 2, 5) / 2;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UI REFS
+═══════════════════════════════════════════════════════════ */
+const lbl   = document.getElementById('lbl');
+const inds  = [0, 1, 2].map(i => document.getElementById('i' + i));
+const cdot  = document.getElementById('cdot');
+const cR    = 21; /* compass radius (px) */
+
+let lastPhase = -1;
+
+function updateUI(phase, lx, ly) {
+  if (phase !== lastPhase) {
+    lastPhase = phase;
+    lbl.textContent = LIGHTS[phase].label;
+    inds.forEach((el, i) => el.classList.toggle('on', i === phase));
+  }
+  /* compass: project light XY onto the small circle */
+  const cx2 = cR + lx * cR * 0.72;
+  const cy2 = cR + ly * cR * 0.72;
+  cdot.style.left = cx2 + 'px';
+  cdot.style.top  = cy2 + 'px';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   COMPUTE INTERPOLATED LIGHT DIRECTION
+═══════════════════════════════════════════════════════════ */
+function getLightDir(ts) {
+  const t     = ts % TOTAL_DUR;
+  const phase = Math.floor(t / PHASE_DUR);
+  const phT   = t % PHASE_DUR;
+
+  const from  = LIGHTS[phase % 3].dir;
+  const to    = LIGHTS[(phase + 1) % 3].dir;
+
+  const blend = phT > HOLD
+    ? easeInOutQuint((phT - HOLD) / XFADE)
+    : 0;
+
+  return {
+    phase,
+    dir: [
+      from[0] + (to[0] - from[0]) * blend,
+      from[1] + (to[1] - from[1]) * blend,
+      from[2] + (to[2] - from[2]) * blend,
+    ],
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════════════════ */
+function draw(ts) {
+  const { phase, dir: [LX, LY, LZ] } = getLightDir(ts);
+
+  updateUI(phase, LX, LY);
+
+  ctx.clearRect(0, 0, SIZE, SIZE);
+
+  /* clip to sphere circle so edge dots are never half-painted */
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, Math.PI * 2);
+  ctx.clip();
+
+  ctx.fillStyle = '#18140f';
+
+  for (let dy = -R; dy <= R; dy += SPACING) {
+    for (let dx = -R; dx <= R; dx += SPACING) {
+      const d2 = dx * dx + dy * dy;
+      if (d2 >= R * R) continue;
+
+      /* outward surface normal at this grid point */
+      const nz = Math.sqrt(1 - d2 / (R * R));
+      const nx = dx / R;
+      const ny = dy / R;
+
+      /* Lambertian diffuse + small ambient */
+      const diff      = Math.max(0, nx * LX + ny * LY + nz * LZ);
+      const intensity = 0.05 + 0.95 * diff;
+
+      /* halftone mapping: bright surface → tiny dot */
+      const dotR = MAX_DOT_R * (1 - intensity * 0.94);
+
+      if (dotR > 0.35) {
+        ctx.beginPath();
+        ctx.arc(cx + dx, cy + dy, dotR, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  ctx.restore();
+  requestAnimationFrame(draw);
+}
+
+requestAnimationFrame(draw);
+</script>
+</body>
+</html>

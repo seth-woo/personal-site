@@ -1,0 +1,102 @@
+
+<canvas id="c" width="320" height="320" style="display:block;margin:auto;"></canvas>
+
+<div style="display:flex;align-items:center;justify-content:center;gap:20px;margin-top:14px;flex-wrap:wrap;">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <label style="font-size:13px;color:var(--color-text-secondary);">speed</label>
+    <input type="range" id="spd" min="0" max="30" value="6" step="1" style="width:90px;">
+    <span id="spd-out" style="font-size:13px;min-width:20px;color:var(--color-text-secondary);">6</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <label style="font-size:13px;color:var(--color-text-secondary);">spacing</label>
+    <input type="range" id="spc" min="4" max="18" value="8" step="1" style="width:90px;">
+    <span id="spc-out" style="font-size:13px;min-width:20px;color:var(--color-text-secondary);">8</span>
+  </div>
+  <button id="tog" style="font-size:13px;padding:4px 14px;">pause</button>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 320, H = 320;
+const cx = W/2, cy = H/2;
+const R = 130;
+
+let angle = 0;
+let running = true;
+let raf;
+
+const spdEl = document.getElementById('spd');
+const spcEl = document.getElementById('spc');
+const spdOut = document.getElementById('spd-out');
+const spcOut = document.getElementById('spc-out');
+const togBtn = document.getElementById('tog');
+
+spdEl.addEventListener('input', () => spdOut.textContent = spdEl.value);
+spcEl.addEventListener('input', () => { spcOut.textContent = spcEl.value; draw(); });
+togBtn.addEventListener('click', () => {
+  running = !running;
+  togBtn.textContent = running ? 'pause' : 'resume';
+  if (running) loop();
+});
+
+function isDark() {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+function draw() {
+  const spacing = parseInt(spcEl.value);
+  const maxDotR = spacing * 0.46;
+
+  const dark = isDark();
+  ctx.clearRect(0, 0, W, H);
+
+  // background circle (subtle tint)
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, Math.PI*2);
+  ctx.fillStyle = dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)';
+  ctx.fill();
+
+  // light direction — orbits around Y axis
+  const lx = Math.cos(angle);
+  const ly = -0.55;
+  const lz = Math.sin(angle) + 0.5;
+  const lLen = Math.sqrt(lx*lx + ly*ly + lz*lz);
+  const LX = lx/lLen, LY = ly/lLen, LZ = lz/lLen;
+
+  ctx.fillStyle = dark ? '#e8e6df' : '#1a1816';
+
+  for (let y = -R; y <= R; y += spacing) {
+    for (let x = -R; x <= R; x += spacing) {
+      const d2 = x*x + y*y;
+      if (d2 > R*R) continue;
+
+      const nz = Math.sqrt(1 - d2/(R*R));
+      const nx = x/R, ny = y/R;
+
+      // Lambertian + soft ambient
+      let diff = nx*LX + ny*LY + nz*LZ;
+      diff = Math.max(0, diff);
+      const ambient = 0.08;
+      const intensity = ambient + (1 - ambient) * diff;
+
+      // halftone: bright surface → small dot
+      const dotR = maxDotR * (1 - intensity * 0.92);
+      if (dotR > 0.4) {
+        ctx.beginPath();
+        ctx.arc(cx + x, cy + y, dotR, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+  }
+}
+
+function loop() {
+  const spd = parseInt(spdEl.value);
+  angle += spd * 0.0007;
+  draw();
+  if (running) raf = requestAnimationFrame(loop);
+}
+
+loop();
+</script>

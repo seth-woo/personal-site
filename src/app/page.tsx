@@ -34,7 +34,7 @@ export default function Home() {
       <WorksList limit={5} showViewAll />
 
       <footer className="mt-14 border-t border-border py-8 text-center font-mono text-[12px] text-very-muted">
-        <p>© {new Date().getFullYear()} Seth Woo</p>
+        <p>© {new Date().getFullYear()} Seth W.H. Woo</p>
       </footer>
     </>
   );

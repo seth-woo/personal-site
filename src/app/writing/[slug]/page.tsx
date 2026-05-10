@@ -41,7 +41,7 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
       </header>
 
       <div className="grid grid-cols-[120px_1fr] gap-x-12">
-        <div className="text-[13px] font-mono text-very-muted pt-[3px] sticky top-24">
+        <div className="text-[13px] font-mono text-very-muted pt-[3px] sticky top-24 h-fit">
           <p>{formattedDate}</p>
           <p className="mt-1">{item.readMinutes} min read</p>
         </div>

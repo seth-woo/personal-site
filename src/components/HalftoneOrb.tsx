@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type HalftoneOrbProps = {
     size?: number;
     seed?: number;
     variant?: "hero" | "item";
     colorScheme?: "blue" | "orange" | "green";
+    forceDarkMode?: boolean;
 };
 
 function clamp(value: number, min: number, max: number) {
@@ -24,8 +25,9 @@ function random(seed: number) {
     };
 }
 
-export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero", colorScheme = "blue" }: HalftoneOrbProps) {
+export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero", colorScheme = "blue", forceDarkMode }: HalftoneOrbProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const [isHovered, setIsHovered] = useState(false);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -75,7 +77,7 @@ export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero", col
         ];
 
         const render = () => {
-            const dark = document.documentElement.classList.contains("dark");
+            const dark = forceDarkMode !== undefined ? forceDarkMode : document.documentElement.classList.contains("dark");
             const styles = getComputedStyle(document.documentElement);
             const text = styles.getPropertyValue("--color-text").trim();
             const background = styles.getPropertyValue("--color-bg").trim();
@@ -86,22 +88,22 @@ export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero", col
                 let sphereColor: string, shadowTone: string, highlightTone: string;
                 
                 if (colorScheme === "blue") {
-                    sphereColor = dark ? "#A5B4FC" : "#003CFF";
-                    shadowTone = dark ? "#5B7BD8" : "#0029B3";
-                    highlightTone = dark ? "#E0E7FF" : "#FFFFFF";
+                    sphereColor = dark ? "#003CFF" : "#A5B4FC";
+                    shadowTone = dark ? "#0029B3" : "#5B7BD8";
+                    highlightTone = dark ? "#FFFFFF" : "#E0E7FF";
                 } else if (colorScheme === "orange") {
-                    sphereColor = dark ? "#FDBA74" : "#C23B00";
-                    shadowTone = dark ? "#C97D4F" : "#8A2900";
-                    highlightTone = dark ? "#FED7AA" : "#FFFFFF";
+                    sphereColor = dark ? "#C23B00" : "#FDBA74";
+                    shadowTone = dark ? "#8A2900" : "#C97D4F";
+                    highlightTone = dark ? "#FFFFFF" : "#FED7AA";
                 } else if (colorScheme === "green") {
-                    sphereColor = dark ? "#86EFAC" : "#006B28";
-                    shadowTone = dark ? "#4D9F6B" : "#004A1C";
-                    highlightTone = dark ? "#BBF7D0" : "#FFFFFF";
+                    sphereColor = dark ? "#006B28" : "#86EFAC";
+                    shadowTone = dark ? "#004A1C" : "#4D9F6B";
+                    highlightTone = dark ? "#FFFFFF" : "#BBF7D0";
                 } else {
                     // Fallback to blue
-                    sphereColor = dark ? "#A5B4FC" : "#003CFF";
-                    shadowTone = dark ? "#5B7BD8" : "#0029B3";
-                    highlightTone = dark ? "#E0E7FF" : "#FFFFFF";
+                    sphereColor = dark ? "#003CFF" : "#A5B4FC";
+                    shadowTone = dark ? "#0029B3" : "#5B7BD8";
+                    highlightTone = dark ? "#FFFFFF" : "#E0E7FF";
                 }
 
                 ctx.fillStyle = sphereColor;
@@ -238,8 +240,16 @@ export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero", col
 
         rafId = window.requestAnimationFrame(render);
         return () => window.cancelAnimationFrame(rafId);
-    }, [seed, size, variant]);
+    }, [seed, size, variant, colorScheme, forceDarkMode]);
 
-    return <canvas ref={canvasRef} aria-hidden="true" className="block" />;
+    return (
+        <canvas 
+            ref={canvasRef} 
+            aria-hidden="true" 
+            className="block"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        />
+    );
 
 }

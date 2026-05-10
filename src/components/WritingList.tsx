@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import HalftoneOrb from "./HalftoneOrb";
 import { sortedWritingItems } from "@/data/content";
+import { useState, useEffect } from "react";
 
 type WritingListProps = {
   limit?: number;
@@ -11,6 +14,19 @@ type WritingListProps = {
 
 export default function WritingList({ limit, showViewAll = false, topClassName = "mt-11" }: WritingListProps) {
   const items = typeof limit === "number" ? sortedWritingItems.slice(0, limit) : sortedWritingItems;
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
+    };
+    
+    checkDarkMode();
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section id="writing" className={topClassName}>
@@ -22,18 +38,18 @@ export default function WritingList({ limit, showViewAll = false, topClassName =
           <Link
             key={item.slug}
             href={`/writing/${item.slug}`}
-            className="group flex flex-col gap-3 rounded-[16px] border border-border px-3.5 py-1 transition-colors duration-[120ms] hover:bg-hover-bg dark:hover:bg-[#f8f8ff] dark:hover:text-[#050505] sm:flex-row sm:items-center sm:gap-4"
+            className="group flex flex-col gap-3 rounded-[16px] border border-border px-3.5 py-1 transition-colors duration-[120ms] hover:bg-hover-bg dark:hover:bg-white dark:hover:text-[#050505] hover:bg-[#111111] hover:text-white sm:flex-row sm:items-center sm:gap-4"
           >
             <div className="flex min-w-0 flex-1 items-center gap-4">
               <div className="h-[33.44px] w-[33.44px] shrink-0">
-                <HalftoneOrb size={33.44} seed={index + 20} variant="item" colorScheme="blue" />
+                <HalftoneOrb size={33.44} seed={index + 20} variant="item" colorScheme="blue" forceDarkMode={!isDarkMode} />
               </div>
               <div className="min-w-0 dark:group-hover:text-[#050505]">
                 <h3 className="text-[16px] font-medium leading-[1.25]">{item.title}</h3>
               </div>
             </div>
             <div className="ml-auto flex shrink-0 items-center gap-5 self-end sm:self-auto">
-              <p className="font-mono text-[12px] text-[#050505] dark:text-very-muted dark:group-hover:text-[#050505]">
+              <p className="font-mono text-[12px] text-[#050505] dark:text-very-muted dark:group-hover:text-[#050505] group-hover:text-[#ececed]">
                 {new Date(item.date).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",

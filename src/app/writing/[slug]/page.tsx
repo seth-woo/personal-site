@@ -36,8 +36,8 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
       </div>
       
       <header className="mb-6">
-        <h1 className="text-[2rem] font-medium leading-tight">{item.title}</h1>
-        <p className="mt-2 text-[16px] font-normal text-muted">{item.subtitle}</p>
+        <h1 className="text-[1.9rem] font-medium leading-tight">{item.title}</h1>
+        <p className="mt-2 text-[15px] font-normal text-muted">{item.subtitle}</p>
       </header>
 
       <div className="grid grid-cols-[120px_1fr] gap-x-12">
@@ -47,7 +47,7 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
         </div>
 
         <div className="prose prose-gray dark:prose-invert max-w-none">
-          <div className="space-y-6 text-[16px] leading-[1.8] text-text text-justify">
+          <div className="space-y-6 text-[15px] leading-[1.8] text-text text-justify">
             {item.body.split("\n\n").map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
@@ -57,7 +57,7 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
             {previousItem && (
               <Link
                 href={`/writing/${previousItem.slug}`}
-                className="flex flex-col text-[14px] font-mono text-muted hover:text-text transition-colors"
+                className="flex flex-col text-[14px] font-sans text-muted hover:text-text transition-colors"
               >
                 ← Previous
                 <span className="text-[13px] font-sans">{previousItem.title}</span>

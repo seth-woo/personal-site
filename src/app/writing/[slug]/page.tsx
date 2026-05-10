@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { writingItems, sortedWritingItems } from "@/data/content";
+import HalftoneOrb from "@/components/HalftoneOrb";
 
 type WritingPageProps = {
   params: Promise<{ slug: string }>;
@@ -35,9 +36,12 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
         </Link>
       </div>
       
-      <header className="mb-6">
-        <h1 className="text-[1.9rem] font-medium leading-tight">{item.title}</h1>
-        <p className="mt-2 text-[15px] font-normal text-muted">{item.subtitle}</p>
+      <header className="mb-6 flex items-center gap-4">
+        <HalftoneOrb size={76} seed={0} variant="hero" colorScheme="blue" />
+        <div>
+          <h1 className="text-[1.9rem] font-medium leading-tight">{item.title}</h1>
+          <p className="mt-2 text-[15px] font-normal text-muted">{item.subtitle}</p>
+        </div>
       </header>
 
       <div className="grid grid-cols-[120px_1fr] gap-x-12">

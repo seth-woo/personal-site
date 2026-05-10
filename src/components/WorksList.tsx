@@ -38,7 +38,7 @@ export default function WorksList({ limit, showViewAll = false, topClassName = "
           <Link
             key={item.slug}
             href={`/works/${item.slug}`}
-            className="group flex flex-col gap-3 rounded-[16px] border border-border px-3.5 py-1 transition-colors duration-[120ms] hover:bg-hover-bg dark:hover:bg-white dark:hover:text-[#050505] hover:bg-[#111111] hover:text-white sm:flex-row sm:items-center sm:gap-4"
+            className="group flex flex-col gap-3 rounded-[16px] border border-border px-3.5 py-1 transition-colors duration-[120ms] dark:hover:bg-white dark:hover:text-[#050505] hover:bg-[#111111] hover:text-white sm:flex-row sm:items-center sm:gap-4"
           >
             <div className="flex min-w-0 flex-1 items-center gap-4">
               <div className="h-[33.44px] w-[33.44px] shrink-0">

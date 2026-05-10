@@ -25,7 +25,7 @@ function random(seed: number) {
     };
 }
 
-export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero", colorScheme = "blue", forceDarkMode }: HalftoneOrbProps) {
+export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero", colorScheme, forceDarkMode }: HalftoneOrbProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [isHovered, setIsHovered] = useState(false);
 
@@ -182,8 +182,15 @@ export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero", col
                 ctx.globalAlpha = 1;
                 itemAngle += 24 * 0.0007;
             } else {
-                const heroSphereColor = dark ? text : "#111111";
-                const heroCutoutColor = background || (dark ? "#111111" : "#f8f8ff");
+                let heroSphereColor: string, heroCutoutColor: string;
+                
+                if (colorScheme === "blue") {
+                    heroSphereColor = dark ? "#A5B4FC" : "#003CFF";
+                    heroCutoutColor = background || (dark ? "#111111" : "#f8f8ff");
+                } else {
+                    heroSphereColor = dark ? text : "#111111";
+                    heroCutoutColor = background || (dark ? "#111111" : "#f8f8ff");
+                }
                 ctx.fillStyle = heroSphereColor;
                 ctx.beginPath();
                 ctx.arc(center, center, radius, 0, Math.PI * 2);

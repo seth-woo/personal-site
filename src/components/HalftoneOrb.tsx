@@ -6,6 +6,7 @@ type HalftoneOrbProps = {
     size?: number;
     seed?: number;
     variant?: "hero" | "item";
+    colorScheme?: "blue" | "orange" | "green";
 };
 
 function clamp(value: number, min: number, max: number) {
@@ -23,7 +24,7 @@ function random(seed: number) {
     };
 }
 
-export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero" }: HalftoneOrbProps) {
+export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero", colorScheme = "blue" }: HalftoneOrbProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {
@@ -81,10 +82,27 @@ export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero" }: H
             ctx.clearRect(0, 0, size, size);
 
             if (variant === "item") {
-                // Item orb: tri-tone dithered halftone (dark blue, blue midtone, white highlights).
-                const sphereColor = dark ? "#4f75ff" : "#0f5bff";
-                const shadowTone = dark ? "#243772" : "#0b2f9a";
-                const highlightTone = dark ? "#f3f6ff" : "#ffffff";
+                // Item orb: tri-tone dithered halftone with color-specific tones.
+                let sphereColor: string, shadowTone: string, highlightTone: string;
+                
+                if (colorScheme === "blue") {
+                    sphereColor = dark ? "#A5B4FC" : "#003CFF";
+                    shadowTone = dark ? "#5B7BD8" : "#0029B3";
+                    highlightTone = dark ? "#E0E7FF" : "#FFFFFF";
+                } else if (colorScheme === "orange") {
+                    sphereColor = dark ? "#FDBA74" : "#C23B00";
+                    shadowTone = dark ? "#C97D4F" : "#8A2900";
+                    highlightTone = dark ? "#FED7AA" : "#FFFFFF";
+                } else if (colorScheme === "green") {
+                    sphereColor = dark ? "#86EFAC" : "#006B28";
+                    shadowTone = dark ? "#4D9F6B" : "#004A1C";
+                    highlightTone = dark ? "#BBF7D0" : "#FFFFFF";
+                } else {
+                    // Fallback to blue
+                    sphereColor = dark ? "#A5B4FC" : "#003CFF";
+                    shadowTone = dark ? "#5B7BD8" : "#0029B3";
+                    highlightTone = dark ? "#E0E7FF" : "#FFFFFF";
+                }
 
                 ctx.fillStyle = sphereColor;
                 ctx.beginPath();

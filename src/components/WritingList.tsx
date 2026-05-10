@@ -26,7 +26,7 @@ export default function WritingList({ limit, showViewAll = false, topClassName =
           >
             <div className="flex min-w-0 flex-1 items-center gap-4">
               <div className="h-[33.44px] w-[33.44px] shrink-0">
-                <HalftoneOrb size={33.44} seed={index + 20} variant="item" />
+                <HalftoneOrb size={33.44} seed={index + 20} variant="item" colorScheme="blue" />
               </div>
               <div className="min-w-0 dark:group-hover:text-[#050505]">
                 <h3 className="text-[16px] font-medium leading-[1.25]">{item.title}</h3>

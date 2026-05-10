@@ -22,7 +22,8 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
   const nextItem = currentIndex > 0 ? sortedItems[currentIndex - 1] : null;
 
   const formattedDate = new Date(item.date).toLocaleDateString("en-US", {
-    month: "long",
+    month: "short",
+    day: "numeric",
     year: "numeric"
   });
 
@@ -39,8 +40,8 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
         <p className="mt-2 text-[16px] font-normal text-muted">{item.subtitle}</p>
       </header>
 
-      <div className="grid grid-cols-[150px_1fr] gap-x-12">
-        <div className="text-[13px] font-mono text-very-muted pt-[3px]">
+      <div className="grid grid-cols-[120px_1fr] gap-x-12">
+        <div className="text-[13px] font-mono text-very-muted pt-[3px] sticky top-24">
           <p>{formattedDate}</p>
           <p className="mt-1">{item.readMinutes} min read</p>
         </div>
@@ -59,7 +60,7 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
                 className="flex flex-col text-[14px] font-mono text-muted hover:text-text transition-colors"
               >
                 ← Previous
-                <span className="text-[13px]">{previousItem.title}</span>
+                <span className="text-[13px] font-sans">{previousItem.title}</span>
               </Link>
             )}
             
@@ -70,8 +71,8 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
                 href={`/writing/${nextItem.slug}`}
                 className="flex flex-col items-end text-[14px] font-mono text-muted hover:text-text transition-colors"
               >
-                <span className="text-[13px]">{nextItem.title}</span>
                 Next →
+                <span className="text-[13px] font-sans">{nextItem.title}</span>
               </Link>
             )}
           </nav>

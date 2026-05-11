@@ -29,7 +29,7 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
   });
 
   return (
-    <article className="min-h-screen">
+    <article className="min-h-screen flex flex-col">
       <div className="mb-6">
         <Link href="/writing" className="text-[13px] font-mono text-muted hover:underline">
           ← view all writings
@@ -44,20 +44,20 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
         </div>
       </header>
 
-      <div className="grid grid-cols-[120px_1fr] gap-x-12">
+      <div className="grid grid-cols-[120px_1fr] gap-x-12 flex-1">
         <div className="text-[13px] font-mono text-very-muted pt-[3px] sticky top-12 h-fit">
           <p>{formattedDate}</p>
           <p className="mt-1">{item.readMinutes} min read</p>
         </div>
 
-        <div className="prose prose-gray dark:prose-invert max-w-none">
-          <div className="space-y-6 text-[15px] leading-[1.8] text-text text-justify">
+        <div className="prose prose-gray dark:prose-invert max-w-none flex flex-col">
+          <div className="space-y-6 text-[15px] leading-[1.8] text-text text-justify flex-1">
             {item.body.split("\n\n").map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
           </div>
 
-          <nav className="mt-12 flex items-center justify-between border-t border-border pt-8">
+          <nav className="mt-8 flex items-center justify-between border-t border-border pt-4">
             {previousItem && (
               <Link
                 href={`/writing/${previousItem.slug}`}
@@ -83,7 +83,7 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
         </div>
       </div>
 
-      <footer className="mt-12 border-t border-border pt-8 text-center font-mono text-[12px] text-very-muted">
+      <footer className="mt-8 border-t border-border pt-8 text-center font-mono text-[12px] text-very-muted">
         <p>© {new Date().getFullYear()} Seth W.H. Woo</p>
       </footer>
     </article>

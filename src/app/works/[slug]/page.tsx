@@ -1,50 +1,88 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { workItems } from "@/data/content";
-
-type WorkPageProps = {
-  params: Promise<{ slug: string }>;
-};
+import HalftoneOrb from "@/components/HalftoneOrb";
 
 export function generateStaticParams() {
   return workItems.map((item) => ({ slug: item.slug }));
 }
 
-export default async function WorkDetailPage({ params }: WorkPageProps) {
-  const { slug } = await params;
-  const item = workItems.find((entry) => entry.slug === slug);
+export default function WorkDetailPage({ params }: { params: { slug: string } }) {
+  const item = workItems.find((item) => item.slug === params.slug);
 
-  if (!item) notFound();
+  if (!item) {
+    notFound();
+  }
 
-  const formattedDate = item.date
-    ? new Date(item.date).toLocaleDateString("en-US", {
-        month: "long",
-        year: "numeric"
-      })
-    : "";
+  const currentIndex = workItems.findIndex((item) => item.slug === params.slug);
+  const sortedItems = [...workItems].sort((a, b) => new Date(b.date!).getTime() - new Date(a.date!).getTime());
+  const previousItem = currentIndex < sortedItems.length - 1 ? sortedItems[currentIndex + 1] : null;
+  const nextItem = currentIndex > 0 ? sortedItems[currentIndex - 1] : null;
+
+  const formattedDate = new Date(item.date!).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  });
 
   return (
-    <article>
-      <Link href="/works" className="text-[13px] text-muted hover:underline">
-        ← works
-      </Link>
-      <div
-        className="mt-6 h-[180px] w-full rounded-lg"
-        style={{ backgroundColor: item.thumbnailColor }}
-        aria-hidden="true"
-      />
-      <h1 className="mt-6 text-[1.5rem] font-medium">{item.title}</h1>
-      <p className="mt-2 text-[14px] text-muted">{item.subtitle}</p>
-      <p className="mt-2 text-[12px] text-very-muted">
-        {item.status === "In Progress" ? "In Progress" : formattedDate}
-      </p>
-      <p className="mt-6 text-[14px] leading-[1.9] text-muted">{item.description}</p>
-      <div className="mt-6 border-b border-border" />
-      <div className="mt-6 space-y-5 text-[14px] leading-[1.9] text-text">
-        {item.body.split("\n\n").map((paragraph) => (
-          <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-        ))}
+    <article className="min-h-screen flex flex-col">
+      <div className="mb-6">
+        <Link href="/works" className="text-[13px] font-mono text-muted hover:underline">
+          ← view all works
+        </Link>
       </div>
+      
+      <header className="mb-6 flex items-center gap-4">
+        <HalftoneOrb size={76} seed={0} variant="hero" colorScheme={item.status === "In Progress" ? "orange" : "green"} />
+        <div>
+          <h1 className="text-[1.9rem] font-medium leading-tight">{item.title}</h1>
+          <p className="mt-2 text-[15px] font-normal text-muted">{item.subtitle}</p>
+        </div>
+      </header>
+
+      <div className="grid grid-cols-[120px_1fr] gap-x-12 flex-1">
+        <div className="text-[13px] font-mono text-very-muted pt-[3px] sticky top-12 h-fit">
+          <p>{formattedDate}</p>
+          <p className="mt-1">{item.status}</p>
+        </div>
+
+        <div className="prose prose-gray dark:prose-invert max-w-none flex flex-col">
+          <div className="space-y-6 text-[15px] leading-[1.8] text-text text-justify flex-1">
+            {item.body.split("\n\n").map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+          </div>
+
+          <nav className="mt-8 flex items-center justify-between border-t border-border pt-4">
+            {previousItem && (
+              <Link
+                href={`/works/${previousItem.slug}`}
+                className="flex flex-col text-[14px] font-sans text-muted hover:text-text transition-colors"
+              >
+                ← Previous
+                <span className="text-[13px] font-sans">{previousItem.title}</span>
+              </Link>
+            )}
+            
+            <div className="flex-1" />
+            
+            {nextItem && (
+              <Link
+                href={`/works/${nextItem.slug}`}
+                className="flex flex-col items-end text-[14px] font-mono text-muted hover:text-text transition-colors"
+              >
+                Next →
+                <span className="text-[13px] font-sans">{nextItem.title}</span>
+              </Link>
+            )}
+          </nav>
+        </div>
+      </div>
+
+      <footer className="mt-8 border-t border-border pt-8 text-center font-mono text-[12px] text-very-muted">
+        <p>© {new Date().getFullYear()} Seth W.H. Woo</p>
+      </footer>
     </article>
   );
 }

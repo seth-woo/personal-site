@@ -187,6 +187,12 @@ export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero", col
                 if (colorScheme === "blue") {
                     heroSphereColor = dark ? "#A5B4FC" : "#003CFF";
                     heroCutoutColor = background || (dark ? "#111111" : "#f8f8ff");
+                } else if (colorScheme === "orange") { 
+                    heroSphereColor = dark ? "#FDBA74" : "#C23B00"; 
+                    heroCutoutColor = background || (dark ? "#111111" : "#f8f8ff");
+                } else if (colorScheme === "green") {
+                    heroSphereColor = dark ? "#86EFAC" : "#006B28";
+                    heroCutoutColor = background || (dark ? "#111111" : "#f8f8ff");
                 } else {
                     heroSphereColor = dark ? text : "#111111";
                     heroCutoutColor = background || (dark ? "#111111" : "#f8f8ff");

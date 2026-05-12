@@ -109,15 +109,6 @@ export const sortedWritingItems = [...writingItems].sort(
   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 );
 
-// export const sortedWorkItems = [...workItems].sort((a, b) => {
-//   if (a.status === "In Progress" && b.status !== "In Progress") return -1;
-//   if (a.status !== "In Progress" && b.status === "In Progress") return 1;
-//   if (!a.date && !b.date) return 0;
-//   if (!a.date) return -1;
-//   if (!b.date) return 1;
-//   return new Date(b.date).getTime() - new Date(a.date).getTime();
-// });
-
 export const sortedWorkItems = [...workItems].sort((a, b) => {
   const aInProgress = a.status === "In Progress";
   const bInProgress = b.status === "In Progress";

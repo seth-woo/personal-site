@@ -14,16 +14,13 @@ export default function WorkDetailPage({ params }: { params: { slug: string } })
     notFound();
   }
 
-  const currentIndex = workItems.findIndex((item) => item.slug === params.slug);
-  const sortedItems = [...workItems].sort((a, b) => new Date(b.date!).getTime() - new Date(a.date!).getTime());
-  const previousItem = currentIndex < sortedItems.length - 1 ? sortedItems[currentIndex + 1] : null;
-  const nextItem = currentIndex > 0 ? sortedItems[currentIndex - 1] : null;
-
-  const formattedDate = new Date(item.date!).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric"
-  });
+  const formattedDate = item.date 
+    ? new Date(item.date).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      })
+    : "";
 
   return (
     <article className="min-h-screen flex flex-col">
@@ -43,8 +40,13 @@ export default function WorkDetailPage({ params }: { params: { slug: string } })
 
       <div className="grid grid-cols-[120px_1fr] gap-x-12 flex-1">
         <div className="text-[13px] font-mono text-very-muted pt-[3px] sticky top-12 h-fit">
-          <p>{formattedDate}</p>
-          <p className="mt-1">{item.status}</p>
+          {item.status === "Completed" && item.date && (
+            <>
+              <p>{formattedDate}</p>
+              <p className="mt-1">{item.source || "Insert Source"}</p>
+            </>
+          )}
+          {item.status === "In Progress" && <p className="mt-1">{item.status}</p>}
         </div>
 
         <div className="prose prose-gray dark:prose-invert max-w-none flex flex-col">
@@ -55,27 +57,38 @@ export default function WorkDetailPage({ params }: { params: { slug: string } })
           </div>
 
           <nav className="mt-8 flex items-center justify-between border-t border-border pt-4">
-            {previousItem && (
-              <Link
-                href={`/works/${previousItem.slug}`}
-                className="flex flex-col text-[14px] font-sans text-muted hover:text-text transition-colors"
-              >
-                ← Previous
-                <span className="text-[13px] font-sans">{previousItem.title}</span>
-              </Link>
-            )}
-            
-            <div className="flex-1" />
-            
-            {nextItem && (
-              <Link
-                href={`/works/${nextItem.slug}`}
-                className="flex flex-col items-end text-[14px] font-mono text-muted hover:text-text transition-colors"
-              >
-                Next →
-                <span className="text-[13px] font-sans">{nextItem.title}</span>
-              </Link>
-            )}
+            {(() => {
+              const currentIndex = workItems.findIndex((item) => item.slug === params.slug);
+              const sortedItems = [...workItems].sort((a, b) => new Date(b.date!).getTime() - new Date(a.date!).getTime());
+              const prevItem = currentIndex < sortedItems.length - 1 ? sortedItems[currentIndex + 1] : null;
+              const nextItem = currentIndex > 0 ? sortedItems[currentIndex - 1] : null;
+              
+              return (
+                <>
+                  {prevItem && (
+                    <Link
+                      href={`/works/${prevItem.slug}`}
+                      className="flex flex-col text-[14px] font-sans text-muted hover:text-text transition-colors"
+                    >
+                      ← Previous
+                      <span className="text-[13px] font-sans">{prevItem.title}</span>
+                    </Link>
+                  )}
+                  
+                  <div className="flex-1" />
+                  
+                  {nextItem && (
+                    <Link
+                      href={`/works/${nextItem.slug}`}
+                      className="flex flex-col items-end text-[14px] font-mono text-muted hover:text-text transition-colors"
+                    >
+                      Next →
+                      <span className="text-[13px] font-sans">{nextItem.title}</span>
+                    </Link>
+                  )}
+                </>
+              );
+            })()}
           </nav>
         </div>
       </div>

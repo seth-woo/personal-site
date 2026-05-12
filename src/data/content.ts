@@ -15,6 +15,7 @@ export type WorkItem = {
   subtitle: string;
   status: WorkStatus;
   date?: string;
+  source?: string;
   thumbnailColor: string;
   description: string;
   body: string;
@@ -54,6 +55,7 @@ export const workItems: WorkItem[] = [
     subtitle: "Insert Subtitle Here",
     status: "Completed",
     date: "2026-05-08",
+    source: "SUT 2026",
     thumbnailColor: "#263047",
     description: "Insert Project Description Here",
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -74,6 +76,17 @@ Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolor
     subtitle: "Insert Subtitle Here",
     status: "In Progress",
     thumbnailColor: "#422647",
+    description: "Insert Project Description Here",
+    body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.`,
+  },
+  {
+    slug: "project-2",
+    title: "Project 2",
+    subtitle: "Insert Subtitle Here",
+    status: "In Progress",
+    thumbnailColor: "#422641",
     description: "Insert Project Description Here",
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 

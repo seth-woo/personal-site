@@ -92,17 +92,42 @@ At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praese
 
 At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.`,
   },
+  {
+    slug: "project-3",
+    title: "Project 3",
+    subtitle: "Insert Subtitle Here",
+    status: "Completed",
+    date: "2023-05-08",
+    source: "Ipoh 2023",
+    thumbnailColor: "#426641",
+    description: "Insert Project Description Here",
+    body: `Write something here.`,
+  },
 ];
 
 export const sortedWritingItems = [...writingItems].sort(
   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 );
 
+// export const sortedWorkItems = [...workItems].sort((a, b) => {
+//   if (a.status === "In Progress" && b.status !== "In Progress") return -1;
+//   if (a.status !== "In Progress" && b.status === "In Progress") return 1;
+//   if (!a.date && !b.date) return 0;
+//   if (!a.date) return -1;
+//   if (!b.date) return 1;
+//   return new Date(b.date).getTime() - new Date(a.date).getTime();
+// });
+
 export const sortedWorkItems = [...workItems].sort((a, b) => {
-  if (a.status === "In Progress" && b.status !== "In Progress") return -1;
-  if (a.status !== "In Progress" && b.status === "In Progress") return 1;
-  if (!a.date && !b.date) return 0;
-  if (!a.date) return -1;
-  if (!b.date) return 1;
-  return new Date(b.date).getTime() - new Date(a.date).getTime();
+  const aInProgress = a.status === "In Progress";
+  const bInProgress = b.status === "In Progress";
+
+  if (aInProgress && bInProgress) {
+    return workItems.indexOf(b) - workItems.indexOf(a);
+  }
+
+  if (aInProgress) return -1;
+  if (bInProgress) return 1;
+
+  return new Date(b.date!).getTime() - new Date(a.date!).getTime();
 });

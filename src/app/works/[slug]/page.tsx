@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { workItems } from "@/data/content";
+import { workItems, sortedWorkItems} from "@/data/content";
 import HalftoneOrb from "@/components/HalftoneOrb";
 
 export function generateStaticParams() {
@@ -58,8 +58,12 @@ export default function WorkDetailPage({ params }: { params: { slug: string } })
 
           <nav className="mt-8 flex items-center justify-between border-t border-border pt-4">
             {(() => {
-              const currentIndex = workItems.findIndex((item) => item.slug === params.slug);
-              const sortedItems = [...workItems].sort((a, b) => new Date(b.date!).getTime() - new Date(a.date!).getTime());
+              // const currentIndex = workItems.findIndex((item) => item.slug === params.slug);
+              // const sortedItems = [...workItems].sort((a, b) => new Date(b.date!).getTime() - new Date(a.date!).getTime());
+              // const prevItem = currentIndex < sortedItems.length - 1 ? sortedItems[currentIndex + 1] : null;
+              // const nextItem = currentIndex > 0 ? sortedItems[currentIndex - 1] : null;
+              const sortedItems = sortedWorkItems;
+              const currentIndex = sortedItems.findIndex((item) => item.slug === params.slug);
               const prevItem = currentIndex < sortedItems.length - 1 ? sortedItems[currentIndex + 1] : null;
               const nextItem = currentIndex > 0 ? sortedItems[currentIndex - 1] : null;
               

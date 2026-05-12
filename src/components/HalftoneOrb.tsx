@@ -244,7 +244,14 @@ export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero", col
                 }
 
                 ctx.globalAlpha = 1;
-                heroAngle += 24 * 0.0007;
+                // heroAngle += 24 * 0.0007;
+                // heroAngle += 0.0168 * (0.4 + 0.6 * Math.abs(Math.sin(time * 0.3)));
+                // heroAngle += 0.0168 * (0.3 + 0.7 * Math.sin(time * 0.3));
+                const speedWave = Math.sin(time * 0.3);
+                const directionShift = Math.sin(time * 0.07);
+                const microWobble = 0.3 * Math.sin(time * 1.1);
+
+                heroAngle += 0.0168 * (speedWave + directionShift + microWobble);
             }
 
             time += 0.016;

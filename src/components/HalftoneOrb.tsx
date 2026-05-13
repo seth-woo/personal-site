@@ -250,11 +250,11 @@ export default function HalftoneOrb({ size = 48, seed = 0, variant = "hero", col
                 const speedWave = Math.sin(time * 0.3);
                 const directionShift = Math.sin(time * 0.07);
                 const microWobble = 0.3 * Math.sin(time * 1.1);
-                const lightDrift = time * 0.08 + 0.5 * Math.sin(time * 0.2);
-                const lx_hero = Math.cos(heroAngle + lightDrift);
-                const ly_hero = -0.55 + 0.15 * Math.sin(time * 0.13);
-                const lz_hero = Math.sin(heroAngle + lightDrift) + 0.5;
-                heroAngle += 0.0168 * (speedWave + directionShift + microWobble + lightDrift + lx_hero + ly_hero + lz_hero);
+                // const lightDrift = time * 0.08 + 0.5 * Math.sin(time * 0.2);
+                // const lx_hero = Math.cos(heroAngle + lightDrift);
+                // const ly_hero = -0.55 + 0.15 * Math.sin(time * 0.13);
+                // const lz_hero = Math.sin(heroAngle + lightDrift) + 0.5;
+                heroAngle += 0.0168 * (speedWave + directionShift + microWobble);
             }
 
             time += 0.016;

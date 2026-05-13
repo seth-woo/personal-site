@@ -34,7 +34,7 @@ export default function WritingList({ limit, showViewAll = false, topClassName =
       <p className="mb-3 border-b border-border pb-3 font-mono text-[12px] uppercase tracking-[0.12em] text-very-muted">
         Writing
       </p>
-      <div className="space-y-2">
+      <div className="space-y-0">
         {items.map((item, index) => (
           <Link
             key={item.slug}
@@ -44,7 +44,7 @@ export default function WritingList({ limit, showViewAll = false, topClassName =
             // className={`group flex flex-col gap-3 rounded-[16px] border border-border px-3.5 py-1 transition-colors transition-opacity duration-[120ms] dark:hover:bg-white dark:hover:text-[#050505] hover:bg-[#111111] hover:text-white sm:flex-row sm:items-center sm:gap-4 ${hoveredSlug !== null && hoveredSlug !== item.slug ? "opacity-60" : "opacity-100"}`}
             className={`group flex flex-col gap-3 rounded-[16px] border border-border px-3.5 py-1 transition-colors transition-opacity duration-[120ms] dark:hover:bg-white dark:hover:text-[#050505] hover:bg-[#111111] hover:text-white sm:flex-row sm:items-center sm:gap-4 ${
               hoveredSlug !== null && hoveredSlug !== item.slug
-                ? "opacity-60"
+                ? "opacity-40"
                 : hoveredSlug === item.slug
                 ? "opacity-100 shadow-[0_6px_24px_rgba(0,0,0,0.36)] -translate-y-[3px]"
                 : "opacity-100"

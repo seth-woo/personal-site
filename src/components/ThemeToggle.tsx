@@ -9,15 +9,15 @@ const THEME_KEY = "theme";
 
 function getStoredTheme(): Theme {
   if (typeof window === "undefined") {
-    return "dark";
+    return "light";
   }
 
   const stored = window.localStorage.getItem(THEME_KEY);
-  return stored === "light" ? "light" : "dark";
+  return stored === "dark" ? "dark" : "light";
 }
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme>("light");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function ThemeToggle() {
     window.localStorage.setItem(THEME_KEY, next);
   };
 
-  const isDark = mounted ? theme === "dark" : true;
+  const isDark = mounted ? theme === "dark" : false;
 
   return (
     <button

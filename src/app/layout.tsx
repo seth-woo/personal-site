@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className={`${ibmPlexMono.variable} ${ibmPlexSans.variable} bg-bg text-text antialiased`}>
         <Header />
         <main className="mx-auto w-full max-w-[738px] px-6 pb-12 pt-7">{children}</main>

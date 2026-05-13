@@ -17,10 +17,11 @@ export type WorkItem = {
   date?: string;
   source?: string;
   heroImage?: string;
-  thumbnailColor: string;
   description: string;
   body: string;
 };
+
+export const DEFAULT_WORK_HERO_IMAGE = "/assets/project-hero-image.jpg";
 
 export const writingItems: WritingItem[] = [
   {
@@ -31,7 +32,7 @@ export const writingItems: WritingItem[] = [
     readMinutes: 1,
     body: `Write something here.
 
-![Writing reference image](/assets/example-writing-image.jpg)
+![Writing reference image](/assets/project-0-hero.jpg)
 
 Continue writing here.`,
   },
@@ -61,8 +62,6 @@ export const workItems: WorkItem[] = [
     status: "Completed",
     date: "2026-05-08",
     source: "SUT 2026",
-    heroImage: "/assets/example-work-image.jpg",
-    thumbnailColor: "#263047",
     description: "Insert Project Description Here",
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
@@ -81,7 +80,6 @@ Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolor
     title: "Project 1",
     subtitle: "Insert Subtitle Here",
     status: "In Progress",
-    thumbnailColor: "#422647",
     description: "Insert Project Description Here",
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
@@ -92,7 +90,6 @@ At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praese
     title: "Project 2",
     subtitle: "Insert Subtitle Here",
     status: "In Progress",
-    thumbnailColor: "#422641",
     description: "Insert Project Description Here",
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
@@ -105,7 +102,6 @@ At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praese
     status: "Completed",
     date: "2023-05-08",
     source: "Ipoh 2023",
-    thumbnailColor: "#426641",
     description: "Insert Project Description Here",
     body: `Write something here.`,
   },

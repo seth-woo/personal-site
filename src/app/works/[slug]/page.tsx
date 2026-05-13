@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { workItems, sortedWorkItems} from "@/data/content";
+import { DEFAULT_WORK_HERO_IMAGE, workItems, sortedWorkItems} from "@/data/content";
 import HalftoneOrb from "@/components/HalftoneOrb";
 import RichBody from "@/components/RichBody";
 
@@ -41,17 +41,15 @@ export default function WorkDetailPage({ params }: { params: { slug: string } })
       </header>
 
       <div className="mb-8 h-[390px] w-full overflow-hidden rounded-[14px] border border-border bg-[#0f1117] md:h-[500px]">
-        {item.heroImage ? (
-          <div className="relative h-full w-full">
-            <Image
-              src={item.heroImage}
-              alt={`${item.title} header image`}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 738px"
-            />
-          </div>
-        ) : null}
+        <div className="relative h-full w-full">
+          <Image
+            src={item.heroImage || DEFAULT_WORK_HERO_IMAGE}
+            alt={`${item.title} header image`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 738px"
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-[120px_1fr] gap-x-12 flex-1">

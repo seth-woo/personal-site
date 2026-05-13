@@ -6,7 +6,7 @@ import ThemeToggle from "./ThemeToggle";
 const navLinks = [
   { href: "https://seth-woo.github.io/", label: "academic-site" },
   { href: "https://github.com/seth-woo", label: "github" },
-  { href: "https://www.linkedin.com/in/sethwoo/", label: "linkedin" }
+  { href: "https://www.linkedin.com/in/sethwoo/", label: "linkedin" },
 ];
 
 export default function Header() {

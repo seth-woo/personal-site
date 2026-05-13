@@ -16,6 +16,7 @@ export type WorkItem = {
   status: WorkStatus;
   date?: string;
   source?: string;
+  heroImage?: string;
   thumbnailColor: string;
   description: string;
   body: string;
@@ -28,7 +29,11 @@ export const writingItems: WritingItem[] = [
     subtitle: "Insert Subtitle Here",
     date: "1998-09-21",
     readMinutes: 1,
-    body: `Write something here.`,
+    body: `Write something here.
+
+![Writing reference image](/assets/example-writing-image.jpg)
+
+Continue writing here.`,
   },
   {
     slug: "piece-1",
@@ -56,6 +61,7 @@ export const workItems: WorkItem[] = [
     status: "Completed",
     date: "2026-05-08",
     source: "SUT 2026",
+    heroImage: "/assets/example-work-image.jpg",
     thumbnailColor: "#263047",
     description: "Insert Project Description Here",
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.

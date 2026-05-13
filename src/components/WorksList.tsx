@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import HalftoneOrb from "./HalftoneOrb";
 import { sortedWorkItems } from "@/data/content";
 import { useState, useEffect } from "react";
@@ -67,13 +68,26 @@ export default function WorksList({ limit, showViewAll = false, topClassName = "
                       year: "numeric"
                     })}
               </p>
-              <div
-                className="h-10 w-16 shrink-0 rounded border border-border"
-                style={{
-                  background: `linear-gradient(135deg, ${item.thumbnailColor}, #111111 58%, #5f8cff)`
-                }}
-                aria-hidden="true"
-              />
+              <div className="h-10 w-16 shrink-0 overflow-hidden rounded border border-border bg-[#111111]" aria-hidden="true">
+                {item.heroImage ? (
+                  <div className="relative h-full w-full">
+                    <Image
+                      src={item.heroImage}
+                      alt=""
+                      fill
+                      className="object-cover"
+                      sizes="64px"
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className="h-full w-full"
+                    style={{
+                      background: `linear-gradient(135deg, ${item.thumbnailColor}, #111111 58%, #5f8cff)`
+                    }}
+                  />
+                )}
+              </div>
               <ArrowUpRight
                 size={17}
                 strokeWidth={1.7}

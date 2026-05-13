@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { workItems, sortedWorkItems} from "@/data/content";
 import HalftoneOrb from "@/components/HalftoneOrb";
+import RichBody from "@/components/RichBody";
 
 export function generateStaticParams() {
   return workItems.map((item) => ({ slug: item.slug }));
@@ -38,6 +40,20 @@ export default function WorkDetailPage({ params }: { params: { slug: string } })
         </div>
       </header>
 
+      <div className="mb-8 h-[390px] w-full overflow-hidden rounded-[14px] border border-border bg-[#0f1117] md:h-[500px]">
+        {item.heroImage ? (
+          <div className="relative h-full w-full">
+            <Image
+              src={item.heroImage}
+              alt={`${item.title} header image`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 738px"
+            />
+          </div>
+        ) : null}
+      </div>
+
       <div className="grid grid-cols-[120px_1fr] gap-x-12 flex-1">
         <div className="text-[13px] font-mono text-very-muted pt-[3px] sticky top-12 h-fit">
           {item.status === "Completed" && item.date && (
@@ -50,11 +66,7 @@ export default function WorkDetailPage({ params }: { params: { slug: string } })
         </div>
 
         <div className="prose prose-gray dark:prose-invert max-w-none flex flex-col">
-          <div className="space-y-6 text-[15px] leading-[1.8] text-text text-justify flex-1">
-            {item.body.split("\n\n").map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
-          </div>
+          <RichBody body={item.body} />
 
           <nav className="mt-8 flex items-center justify-between border-t border-border pt-4">
             {(() => {

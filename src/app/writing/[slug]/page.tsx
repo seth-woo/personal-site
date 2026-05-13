@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { writingItems, sortedWritingItems } from "@/data/content";
 import HalftoneOrb from "@/components/HalftoneOrb";
+import RichBody from "@/components/RichBody";
 
 type WritingPageProps = {
   params: Promise<{ slug: string }>;
@@ -51,11 +52,7 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
         </div>
 
         <div className="prose prose-gray dark:prose-invert max-w-none flex flex-col">
-          <div className="space-y-6 text-[15px] leading-[1.8] text-text text-justify flex-1">
-            {item.body.split("\n\n").map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
-          </div>
+          <RichBody body={item.body} />
 
           <nav className="mt-8 flex items-center justify-between border-t border-border pt-4">
             {previousItem && (

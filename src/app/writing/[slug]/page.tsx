@@ -52,7 +52,7 @@ export default async function WritingDetailPage({ params }: WritingPageProps) {
         </div>
 
         <div className="prose prose-gray dark:prose-invert max-w-none flex flex-col">
-          <RichBody body={item.body} />
+          <RichBody body={item.body} enableImageLightbox />
 
           <nav className="mt-8 flex items-center justify-between border-t border-border pt-4">
             {previousItem && (
